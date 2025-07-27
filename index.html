@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODEX INC - Learn to Code</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- html2canvas for certificate download -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap'); /* For certificate signature */
+
+        .font-inter {
+            font-family: 'Inter', sans-serif;
+        }
+        .font-great-vibes {
+            font-family: 'Great Vibes', cursive;
+        }
+
+        body {
+            background: linear-gradient(135deg, #e0e7ff 0%, #c3daff 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.6;
+            color: #374151;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+            background-color: #f0f4f8;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #4f46e5;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #3730a3;
+        }
+        .hidden {
+            display: none;
+        }
+
+        .btn-primary {
+            @apply bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-indigo-300;
+            border: none;
+        }
+        .btn-secondary {
+            @apply bg-gray-700 hover:bg-gray-800 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-gray-300;
+        }
+        .btn-success {
+            @apply bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-green-300;
+        }
+        .btn-danger {
+            @apply bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105;
+        }
+
+        .section-card {
+            @apply bg-white p-8 md:p-12 rounded-2xl shadow-2xl border border-gray-100;
+        }
+
+        .form-input {
+            @apply mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm
+                   transition-all duration-200 ease-in-out
+                   focus:ring-2 focus:ring-indigo-400 focus:border-indigo-500
+                   hover:border-indigo-300;
+        }
+
+        .modal-content {
+            animation: slideIn 0.3s ease-out forwards;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+        }
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .lesson-card {
+            transition: all 0.3s ease-in-out;
+        }
+        .lesson-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        /* Certificate specific styling */
+        #certificate-container {
+            background: linear-gradient(180deg, #ffffff 0%, #f0f4f8 100%);
+            border: 10px solid #4f46e5; /* Strong border */
+            border-image: linear-gradient(45deg, #6366f1, #8b5cf6) 1; /* Gradient border */
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            max-width: 800px; /* Standard certificate width */
+            aspect-ratio: 11 / 8.5; /* Common certificate aspect ratio (landscape) */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-family: 'Inter', sans-serif;
+            color: #374151;
+        }
+        #certificate-container::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            right: -50px;
+            bottom: -50px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.05"><text x="50" y="50" font-family="Inter" font-size="20" fill="%236366f1" text-anchor="middle" dominant-baseline="middle" transform="rotate(-20 50 50)">CODEX INC</text></svg>') repeat;
+            background-size: 200px;
+            opacity: 0.05;
+            z-index: 0;
+            pointer-events: none;
+        }
+        #certificate-content {
+            position: relative;
+            z-index: 1;
+            padding: 20px;
+        }
+        #certificate-logo-placeholder {
+            width: 80px;
+            height: 80px;
+            background-color: #6366f1;
+            border-radius: 50%;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        #certificate-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1f2937;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+        }
+        #certificate-subtitle {
+            font-size: 1.5rem;
+            color: #4f46e5;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        #certificate-name {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #1f2937;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        #certificate-course-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #4f46e5;
+            margin-top: 15px;
+            margin-bottom: 20px;
+        }
+        #certificate-date {
+            font-size: 1.2rem;
+            color: #6b7280;
+            margin-top: 20px;
+        }
+        #certificate-signature-line {
+            width: 60%;
+            border-bottom: 2px dashed #9ca3af;
+            margin: 40px auto 10px auto;
+        }
+        #certificate-signature-text {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.5rem;
+            color: #1f2937;
+            margin-top: -20px;
+        }
+        @media (max-width: 768px) {
+            #certificate-container {
+                padding: 20px;
+                aspect-ratio: unset; /* Allow height to adjust on smaller screens */
+                height: auto;
+                max-width: 95%;
+            }
+            #certificate-logo-placeholder {
+                width: 60px;
+                height: 60px;
+                font-size: 1.8rem;
+            }
+            #certificate-title {
+                font-size: 1.8rem;
+            }
+            #certificate-subtitle {
+                font-size: 1.1rem;
+            }
+            #certificate-name {
+                font-size: 2.2rem;
+            }
+            #certificate-course-title {
+                font-size: 1.5rem;
+            }
+            #certificate-date {
+                font-size: 0.9rem;
+            }
+            #certificate-signature-text {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body class="font-inter text-gray-800">
+    <!-- Navigation Bar -->
+    <nav class="bg-white p-4 shadow-xl sticky top-0 z-50 border-b-2 border-indigo-100">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center">
+                <!-- Space for Logo -->
+                <div class="w-8 h-8 mr-2 bg-indigo-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                    <!-- You can replace this div with an <img> tag for your logo -->
+                    <img src="cod.jpg" alt="">
+                </div>
+                <div class="text-gray-900 text-3xl font-extrabold tracking-tight">CODEX INC</div>
+            </div>
+            <div id="nav-auth-buttons" class="flex space-x-4 md:space-x-6">
+                <!-- Buttons will be dynamically added here -->
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow container mx-auto p-6 py-10">
+        <!-- Auth Section (Login/Signup) -->
+        <section id="auth-section" class="section-card max-w-md mx-auto my-12 hidden">
+            <h2 id="auth-title" class="text-4xl font-extrabold text-gray-900 text-center mb-8">Login</h2>
+            <form id="auth-form" class="space-y-6">
+                <!-- New Full Name Field -->
+                <div>
+                    <label for="fullName" class="block text-lg font-medium text-gray-700 mb-2">Full Name</label>
+                    <input type="text" id="fullName" name="fullName" class="form-input" placeholder="John Doe" required>
+                </div>
+                <div>
+                    <label for="email" class="block text-lg font-medium text-gray-700 mb-2">Email</label>
+                    <input type="email" id="email" name="email" class="form-input" placeholder="your@example.com" required>
+                </div>
+                <div>
+                    <label for="password" class="block text-lg font-medium text-gray-700 mb-2">Password</label>
+                    <input type="password" id="password" name="password" class="form-input" placeholder="********" required>
+                </div>
+                <button type="submit" id="auth-button" class="btn-primary w-full">
+                    Login
+                </button>
+            </form>
+            <p id="toggle-auth-mode" class="text-center mt-6 text-gray-600 cursor-pointer hover:text-indigo-600 transition-colors duration-200">Don't have an account? <span class="font-semibold">Sign Up</span></p>
+            <div id="authMessageBox" class="mt-6 p-4 rounded-md text-center hidden"></div>
+        </section>
+
+        <!-- Dashboard Section (Logged In) -->
+        <section id="dashboard-section" class="hidden">
+            <div class="section-card mb-8">
+                <h2 class="text-4xl font-extrabold text-gray-900 mb-4">Welcome, <span id="user-email" class="text-indigo-600"></span>!</h2>
+                <p class="text-lg text-gray-600 mb-4">Your User ID: <span id="user-id" class="font-mono text-sm bg-gray-100 p-1 rounded-md text-gray-700"></span></p>
+                <div class="bg-indigo-100 p-5 rounded-lg shadow-inner flex flex-col sm:flex-row items-center justify-between gap-4 mt-6">
+                    <p class="text-xl text-indigo-800 font-semibold">Lessons Completed:</p>
+                    <span id="completed-lessons-count" class="text-5xl font-extrabold text-indigo-900 drop-shadow-md">0</span>
+                </div>
+            </div>
+
+            <h3 class="text-3xl font-extrabold text-gray-900 mb-6 mt-10">Available Lessons</h3>
+            <div id="lessons-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Lessons will be dynamically loaded here -->
+            </div>
+        </section>
+
+        <!-- Lesson Detail Modal -->
+        <div id="lesson-detail-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50 hidden">
+            <div class="bg-white rounded-xl shadow-2xl p-8 max-w-3xl w-full max-h-[90vh] overflow-y-auto relative modal-content">
+                <button id="close-modal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-3xl font-bold transition-colors duration-200">&times;</button>
+                <h3 id="modal-lesson-title" class="text-4xl font-extrabold text-gray-900 mb-4 pb-2 border-b border-gray-200"></h3>
+                <p id="modal-lesson-description" class="text-gray-700 leading-relaxed mb-6"></p>
+                
+                <!-- Updated Video Container: Now uses a thumbnail and a link -->
+                <div id="modal-video-container" class="relative w-full mb-6 bg-gray-900 rounded-lg shadow-md overflow-hidden flex items-center justify-center" style="padding-bottom: 56.25%; height: 0;">
+                    <img id="modal-video-thumbnail" src="" alt="Video Thumbnail" class="absolute top-0 left-0 w-full h-full object-cover cursor-pointer" style="display: none;">
+                    <a id="modal-video-link" href="#" target="_blank" class="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 hover:bg-opacity-75 transition-opacity duration-200 text-white text-xl font-bold rounded-lg" style="display: none;">
+                        <svg class="w-16 h-16" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
+                        <span class="ml-2">Watch Video</span>
+                    </a>
+                    <p id="video-not-available" class="text-gray-400 text-center p-4" style="display: none;">Video not available or invalid URL.</p>
+                </div>
+                
+                <div id="modal-code-snippet-container" class="bg-gray-800 p-4 rounded-lg font-mono text-sm text-gray-200 overflow-x-auto mb-6 shadow-inner">
+                    <pre><code id="modal-code-snippet"></code></pre>
+                </div>
+
+                <div class="flex justify-end space-x-4">
+                    <button id="start-quiz-button" class="btn-secondary">
+                        Start Quiz
+                    </button>
+                    <button id="view-certificate-button" class="btn-success hidden">
+                        View Certificate
+                    </button>
+                    <button id="mark-complete-button" class="btn-success">
+                        Mark as Complete
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Modal -->
+        <div id="quiz-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50 hidden">
+            <div class="bg-white rounded-xl shadow-2xl p-8 max-w-3xl w-full max-h-[90vh] overflow-y-auto relative modal-content">
+                <button id="close-quiz-modal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-3xl font-bold transition-colors duration-200">&times;</button>
+                <h3 class="text-4xl font-extrabold text-gray-900 mb-6 pb-2 border-b border-gray-200">Quiz: <span id="quiz-lesson-title"></span></h3>
+                <div id="quiz-questions-container" class="space-y-6">
+                    <!-- Quiz questions will be loaded here -->
+                    <p class="text-center text-gray-500" id="quiz-loading-message">Generating quiz questions...</p>
+                </div>
+                <div id="quizMessageBox" class="mt-6 p-4 rounded-md text-center hidden"></div>
+                <div class="flex justify-end mt-8">
+                    <button id="submit-quiz-button" class="btn-primary">
+                        Submit Quiz
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Certificate Modal -->
+        <div id="certificate-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50 hidden">
+            <div class="bg-white rounded-xl shadow-2xl p-8 max-w-4xl w-full max-h-[95vh] overflow-y-auto relative modal-content flex flex-col items-center">
+                <button id="close-certificate-modal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-3xl font-bold transition-colors duration-200">&times;</button>
+                
+                <div id="certificate-container" class="w-full">
+                    <div id="certificate-content">
+                        <div id="certificate-logo-placeholder">CI</div>
+                        <h1 id="certificate-company-name" class="text-4xl font-extrabold text-gray-900 mb-2">CODEX INC</h1>
+                        <p id="certificate-title">CERTIFICATE OF COMPLETION</p>
+                        <p id="certificate-subtitle">THIS CERTIFIES THAT</p>
+                        <p id="certificate-name" class="font-great-vibes"></p>
+                        <p class="text-lg text-gray-700 mt-4">HAS SUCCESSFULLY COMPLETED THE COURSE</p>
+                        <p id="certificate-course-title"></p>
+                        <div id="certificate-signature-line"></div>
+                        <p id="certificate-signature-text" class="font-great-vibes">Instructor Signature</p>
+                        <p id="certificate-date"></p>
+                    </div>
+                </div>
+
+                <div class="flex justify-center mt-6 space-x-4">
+                    <button id="download-certificate-button" class="btn-success">
+                        Download Certificate
+                    </button>
+                    <button id="close-certificate-and-return-button" class="btn-secondary">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6 text-center mt-auto">
+        <div class="container mx-auto">
+            <p>&copy; 2025 CODEX INC. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, getDoc, setDoc, onSnapshot, increment, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // IMPORTANT: PASTE YOUR FIREBASE CONFIGURATION HERE
+        // Replace everything within the curly braces {} below with the exact config you copied from Firebase Console.
+        const firebaseConfig = {
+  apiKey: "AIzaSyByPNeh0U6WHPtHDM7AmyMuAQkDhOkmIr8",
+  authDomain: "codexlocalwebsite.firebaseapp.com",
+  projectId: "codexlocalwebsite",
+  storageBucket: "codexlocalwebsite.firebasestorage.app",
+  messagingSenderId: "662986994226",
+  appId: "1:662986994226:web:b18e38373f206152aac22b",
+  measurementId: "G-L3Y4T3W4ZD"
+};
+
+
+        // Use your project ID as appId for consistency in Firestore paths
+        const appId = firebaseConfig.projectId; 
+        console.log("User Site - [INIT] Using Firebase Project ID (appId):", appId); // Log appId for debugging
+        
+        // Initialize Firebase
+        let app;
+        let db;
+        let auth;
+        try {
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+            console.log("User Site - [INIT] Firebase app initialized successfully:", app.name);
+        } catch (initError) {
+            console.error("User Site - [INIT ERROR] Failed to initialize Firebase app:", initError);
+            document.getElementById('authMessageBox').classList.remove('hidden');
+            document.getElementById('authMessageBox').textContent = `Error initializing Firebase: ${initError.message}. Check your firebaseConfig.`;
+            document.getElementById('authMessageBox').classList.add('bg-red-100', 'text-red-700');
+        }
+
+
+        // UI Elements
+        const navAuthButtons = document.getElementById('nav-auth-buttons');
+        const authSection = document.getElementById('auth-section');
+        const authTitle = document.getElementById('auth-title');
+        const authForm = document.getElementById('auth-form');
+        const fullNameInput = document.getElementById('fullName'); // New: Full Name input
+        const authButton = document.getElementById('auth-button');
+        const toggleAuthMode = document.getElementById('toggle-auth-mode');
+        const authMessageBox = document.getElementById('authMessageBox');
+        const dashboardSection = document.getElementById('dashboard-section');
+        const userEmailSpan = document.getElementById('user-email');
+        const userIdSpan = document.getElementById('user-id');
+        const completedLessonsCountSpan = document.getElementById('completed-lessons-count');
+        const lessonsList = document.getElementById('lessons-list');
+        const lessonDetailModal = document.getElementById('lesson-detail-modal');
+        const closeModalButton = document.getElementById('close-modal');
+        const modalLessonTitle = document.getElementById('modal-lesson-title');
+        const modalLessonDescription = document.getElementById('modal-lesson-description');
+        // YouTube Video Elements (Updated)
+        const modalVideoContainer = document.getElementById('modal-video-container');
+        const modalVideoThumbnail = document.getElementById('modal-video-thumbnail');
+        const modalVideoLink = document.getElementById('modal-video-link');
+        const videoNotAvailable = document.getElementById('video-not-available');
+
+        const modalCodeSnippetContainer = document.getElementById('modal-code-snippet-container');
+        const modalCodeSnippet = document.getElementById('modal-code-snippet');
+        const markCompleteButton = document.getElementById('mark-complete-button');
+        const startQuizButton = document.getElementById('start-quiz-button'); // New: Start Quiz button
+        const viewCertificateButton = document.getElementById('view-certificate-button'); // New: View Certificate button
+
+        // Quiz Modal Elements
+        const quizModal = document.getElementById('quiz-modal');
+        const closeQuizModalButton = document.getElementById('close-quiz-modal');
+        const quizLessonTitleSpan = document.getElementById('quiz-lesson-title');
+        const quizQuestionsContainer = document.getElementById('quiz-questions-container');
+        const quizLoadingMessage = document.getElementById('quiz-loading-message');
+        const quizMessageBox = document.getElementById('quizMessageBox');
+        const submitQuizButton = document.getElementById('submit-quiz-button');
+
+        // Certificate Modal Elements
+        const certificateModal = document.getElementById('certificate-modal');
+        const closeCertificateModalButton = document.getElementById('close-certificate-modal');
+        const certificateContainer = document.getElementById('certificate-container');
+        const certificateName = document.getElementById('certificate-name');
+        const certificateCourseTitle = document.getElementById('certificate-course-title');
+        const certificateDate = document.getElementById('certificate-date');
+        const downloadCertificateButton = document.getElementById('download-certificate-button');
+        const closeCertificateAndReturnButton = document.getElementById('close-certificate-and-return-button');
+
+
+        let isLoginMode = true; // State for login/signup toggle
+        let currentUserId = null; // Stores current user's ID
+        let currentUserName = null; // Stores current user's full name
+        let currentLessonId = null; // Stores the ID of the lesson currently in modal
+        let currentLessonTitle = null; // Stores the title of the lesson currently in modal
+        let currentLessonDescription = null; // Stores the description of the lesson currently in modal
+        let currentQuizQuestions = []; // Stores the generated quiz questions and answers
+
+        // Function to display messages
+        function showMessage(box, message, type = 'info') {
+            box.textContent = message;
+            box.classList.remove('hidden', 'bg-red-100', 'text-red-700', 'bg-green-100', 'text-green-700', 'bg-blue-100', 'text-blue-700');
+            if (type === 'error') {
+                box.classList.add('bg-red-100', 'text-red-700');
+            } else if (type === 'success') {
+                box.classList.add('bg-green-100', 'text-green-700');
+            } else {
+                box.classList.add('bg-blue-100', 'text-blue-700');
+            }
+        }
+
+        // Toggle Login/Signup Mode
+        toggleAuthMode.addEventListener('click', () => {
+            isLoginMode = !isLoginMode;
+            if (isLoginMode) {
+                authTitle.textContent = 'Login';
+                authButton.textContent = 'Login';
+                toggleAuthMode.innerHTML = `Don't have an account? <span class="font-semibold">Sign Up</span>`;
+                fullNameInput.classList.add('hidden'); // Hide full name for login
+                fullNameInput.removeAttribute('required'); // Remove required for login
+            } else {
+                authTitle.textContent = 'Sign Up';
+                authButton.textContent = 'Sign Up';
+                toggleAuthMode.innerHTML = `Already have an account? <span class="font-semibold">Login</span>`;
+                fullNameInput.classList.remove('hidden'); // Show full name for signup
+                fullNameInput.setAttribute('required', 'required'); // Add required for signup
+            }
+            authMessageBox.classList.add('hidden'); // Clear previous messages
+        });
+
+        // Handle Auth Form Submission
+        authForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = authForm.email.value;
+            const password = authForm.password.value;
+            const fullName = fullNameInput.value; // Get full name
+
+            authMessageBox.classList.add('hidden'); // Clear previous messages
+
+            if (!auth) {
+                showMessage(authMessageBox, "Firebase Auth not ready. Check initialization errors.", 'error');
+                console.error("User: Auth object not initialized. Cannot process form.");
+                return;
+            }
+            if (!db) {
+                showMessage(authMessageBox, "Firebase Firestore not ready. Cannot process form.", 'error');
+                console.error("User: Firestore DB not ready. Cannot process form.");
+                return;
+            }
+
+            try {
+                if (isLoginMode) {
+                    console.log("User: [AUTH] Attempting to sign in with email/password.");
+                    await signInWithEmailAndPassword(auth, email, password);
+                    showMessage(authMessageBox, 'Logged in successfully!', 'success');
+                } else {
+                    console.log("User: [AUTH] Attempting to create user with email/password.");
+                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                    
+                    // Store full name and increment user count on signup
+                    const userDocRef = doc(db, `artifacts/${appId}/users/${userCredential.user.uid}`);
+                    await setDoc(userDocRef, {
+                        fullName: fullName, // Save full name
+                        completedLessons: {} // Initialize completed lessons
+                    }, { merge: true });
+
+                    const userCountsRef = doc(db, `artifacts/${appId}/public/data/appMetadata/userCounts`);
+                    await setDoc(userCountsRef, {
+                        totalUsers: increment(1)
+                    }, { merge: true });
+                    console.log("User: [FIRESTORE] User count incremented and full name saved on signup.");
+
+                    showMessage(authMessageBox, 'Account created successfully! Please login.', 'success');
+                    isLoginMode = true; // Switch back to login mode after signup
+                    authTitle.textContent = 'Login';
+                    authButton.textContent = 'Login';
+                    toggleAuthMode.innerHTML = `Already have an account? <span class="font-semibold">Login</span>`;
+                    fullNameInput.classList.add('hidden'); // Hide full name for login
+                    fullNameInput.removeAttribute('required'); // Remove required for login
+                    authForm.reset(); // Clear form after successful signup
+                }
+            } catch (error) {
+                console.error("User: [AUTH ERROR] Authentication failed:", error);
+                showMessage(authMessageBox, `Authentication failed: ${error.message}`, 'error');
+            }
+        });
+
+        // Firebase Auth State Observer
+        if (auth) { // Only attach listener if auth was initialized successfully
+            onAuthStateChanged(auth, async (user) => {
+                console.log("User: [AUTH STATE] Auth state changed. Current user:", user ? user.uid : "null");
+                
+                // IMPORTANT: Check for email to distinguish real users from anonymous sessions
+                if (user && user.email) { // User is logged in with email/password
+                    currentUserId = user.uid;
+                    userEmailSpan.textContent = user.email;
+                    userIdSpan.textContent = user.uid;
+                    
+                    // Fetch user's full name
+                    const userDocRef = doc(db, `artifacts/${appId}/users/${currentUserId}`);
+                    const userDocSnap = await getDoc(userDocRef);
+                    if (userDocSnap.exists() && userDocSnap.data().fullName) {
+                        currentUserName = userDocSnap.data().fullName;
+                        console.log("User: Full name fetched:", currentUserName);
+                    } else {
+                        currentUserName = user.email; // Fallback to email if name not found
+                        console.warn("User: Full name not found, using email as fallback.");
+                    }
+
+                    authSection.classList.add('hidden');
+                    dashboardSection.classList.remove('hidden');
+                    renderNavButtons(true); // Show logout button
+                    console.log("User: [AUTH STATE] Email user logged in. Displaying dashboard.");
+
+                    // Listen for user's completed lessons
+                    onSnapshot(userDocRef, (docSnap) => {
+                        if (docSnap.exists()) {
+                            const userData = docSnap.data();
+                            const completed = userData.completedLessons ? Object.keys(userData.completedLessons).length : 0;
+                            completedLessonsCountSpan.textContent = completed;
+                            console.log("User: [FIRESTORE] Completed lessons count updated:", completed);
+                        } else {
+                            completedLessonsCountSpan.textContent = 0;
+                            console.log("User: [FIRESTORE] No user progress document found, setting completed lessons to 0.");
+                        }
+                    }, (error) => {
+                        console.error("User: [FIRESTORE ERROR] Error listening to user doc:", error);
+                        showMessage(authMessageBox, `Error loading user progress: ${error.message}`, 'error');
+                    });
+
+                    // Load lessons
+                    loadLessons();
+                } else { // No user, or an anonymous user (like admin's session)
+                    console.log("User: [AUTH STATE] No email user logged in. Showing login form.");
+                    currentUserId = null;
+                    currentUserName = null;
+                    authSection.classList.remove('hidden'); // Show the login/signup form
+                    dashboardSection.classList.add('hidden'); // Hide the dashboard
+                    renderNavButtons(false); // Show login/signup buttons
+                    // Ensure full name field is visible for signup
+                    fullNameInput.classList.remove('hidden');
+                    fullNameInput.setAttribute('required', 'required');
+                }
+            }, (error) => {
+                console.error("User: [AUTH STATE ERROR] Error observing auth state:", error);
+                showMessage(authMessageBox, `Authentication observer error: ${error.message}`, 'error');
+            });
+        } else {
+            console.error("User: Auth object is null, cannot attach auth state listener.");
+            // Ensure auth section is shown if Firebase init fails
+            authSection.classList.remove('hidden');
+            dashboardSection.classList.add('hidden');
+            renderNavButtons(false);
+        }
+
+        // Render Navigation Buttons based on Auth State
+        function renderNavButtons(loggedIn) {
+            navAuthButtons.innerHTML = ''; // Clear existing buttons
+            if (loggedIn) {
+                const logoutButton = document.createElement('button');
+                logoutButton.className = 'btn-danger';
+                logoutButton.textContent = 'Logout';
+                logoutButton.onclick = async () => {
+                    await signOut(auth);
+                    showMessage(authMessageBox, 'Logged out successfully!', 'success');
+                    console.log("User: Logged out.");
+                };
+                navAuthButtons.appendChild(logoutButton);
+            } else {
+                const loginButton = document.createElement('button');
+                loginButton.className = 'btn-primary';
+                loginButton.textContent = 'Login / Sign Up';
+                loginButton.onclick = () => {
+                    isLoginMode = true;
+                    authTitle.textContent = 'Login';
+                    authButton.textContent = 'Login';
+                    toggleAuthMode.innerHTML = `Don't have an account? <span class="font-semibold">Sign Up</span>`;
+                    authSection.classList.remove('hidden'); // Show auth section
+                    dashboardSection.classList.add('hidden'); // Hide dashboard
+                    fullNameInput.classList.remove('hidden'); // Ensure full name is visible for signup option
+                    fullNameInput.setAttribute('required', 'required');
+                    console.log("User: Navigating to login/signup form.");
+                };
+                navAuthButtons.appendChild(loginButton);
+            }
+        }
+
+        // Load Lessons from Firestore
+        async function loadLessons() {
+            if (!db) {
+                console.error("User: Firestore DB object not initialized. Cannot load lessons.");
+                lessonsList.innerHTML = '<p class="text-center col-span-full text-red-500">Error: Firebase Firestore not ready.</p>';
+                return;
+            }
+            lessonsList.innerHTML = '<p class="text-center col-span-full text-gray-500">Loading lessons...</p>';
+            const lessonsCollectionRef = collection(db, `artifacts/${appId}/public/data/lessons`);
+            console.log("User: [FIRESTORE] Listening for lessons at path:", `artifacts/${appId}/public/data/lessons`);
+            onSnapshot(lessonsCollectionRef, async (snapshot) => {
+                lessonsList.innerHTML = ''; // Clear existing lessons
+                if (snapshot.empty) {
+                    lessonsList.innerHTML = '<p class="text-center col-span-full text-gray-500">No lessons available yet.</p>';
+                    console.log("User: [FIRESTORE] No lessons found in Firestore.");
+                    return;
+                }
+
+                // Ensure currentUserId is available before fetching user progress
+                let completedLessons = {};
+                if (currentUserId) {
+                    const userDocRef = doc(db, `artifacts/${appId}/users/${currentUserId}`);
+                    try {
+                        const userDocSnap = await getDoc(userDocRef);
+                        completedLessons = userDocSnap.exists() && userDocSnap.data().completedLessons ? userDocSnap.data().completedLessons : {};
+                        console.log("User: [FIRESTORE] Fetched user completed lessons for display.");
+                    } catch (error) {
+                        console.error("User: [FIRESTORE ERROR] Error fetching user progress:", error);
+                        showMessage(authMessageBox, `Error loading your progress: ${error.message}`, 'error');
+                    }
+                } else {
+                    console.log("User: [FIRESTORE] No currentUserId, cannot load user-specific progress.");
+                }
+
+                snapshot.forEach(doc => {
+                    const lesson = doc.data();
+                    const lessonId = doc.id;
+                    const isCompleted = completedLessons[lessonId] && completedLessons[lessonId].completed === true;
+                    const quizPassed = completedLessons[lessonId] && completedLessons[lessonId].quizPassed === true;
+
+                    const lessonCard = document.createElement('div');
+                    lessonCard.className = `bg-white p-6 rounded-xl shadow-xl border ${isCompleted ? 'border-green-400' : 'border-gray-100'} hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 flex flex-col lesson-card`;
+                    lessonCard.innerHTML = `
+                        <h4 class="text-2xl font-bold text-gray-900 mb-2">${lesson.title}</h4>
+                        <p class="text-gray-700 text-sm mb-4 line-clamp-3 flex-grow">${lesson.description}</p>
+                        ${isCompleted ? '<span class="inline-block bg-green-200 text-green-800 text-xs font-semibold px-3 py-1 rounded-full mb-3 self-start shadow-sm">✓ Completed</span>' : ''}
+                        ${quizPassed ? '<span class="inline-block bg-blue-200 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full mb-3 self-start shadow-sm ml-2">✓ Quiz Passed</span>' : ''}
+                        <button data-lesson-id="${lessonId}" 
+                                data-lesson-title="${lesson.title}"
+                                data-lesson-description="${lesson.description}"
+                                class="view-lesson-btn btn-primary mt-auto self-start text-sm py-2 px-4">
+                            View Lesson
+                        </button>
+                    `;
+                    lessonsList.appendChild(lessonCard);
+                });
+                console.log("User: [FIRESTORE] Lessons rendered.");
+
+                document.querySelectorAll('.view-lesson-btn').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const lessonId = e.target.dataset.lessonId;
+                        const lessonTitle = e.target.dataset.lessonTitle;
+                        const lessonDescription = e.target.dataset.lessonDescription;
+                        openLessonModal(lessonId, lessonTitle, lessonDescription);
+                    });
+                });
+            }, (error) => {
+                console.error("User: [FIRESTORE ERROR] Error loading lessons:", error);
+                lessonsList.innerHTML = '<p class="text-center col-span-full text-red-500">Error loading lessons.</p>';
+                showMessage(authMessageBox, `Error loading lessons: ${error.message}`, 'error');
+            });
+        }
+
+        // Open Lesson Detail Modal
+        async function openLessonModal(lessonId, lessonTitle, lessonDescription) {
+            currentLessonId = lessonId; 
+            currentLessonTitle = lessonTitle;
+            currentLessonDescription = lessonDescription;
+
+            modalLessonTitle.textContent = 'Loading...';
+            modalLessonDescription.textContent = '';
+            modalCodeSnippetContainer.classList.add('hidden');
+            modalCodeSnippet.textContent = '';
+            markCompleteButton.classList.add('hidden');
+            startQuizButton.classList.add('hidden'); // Hide by default
+            viewCertificateButton.classList.add('hidden'); // Hide by default
+
+            // Reset video display elements
+            modalVideoContainer.style.paddingBottom = '56.25%'; // Ensure aspect ratio for video container
+            modalVideoLink.style.display = 'none';
+            modalVideoThumbnail.style.display = 'none';
+            videoNotAvailable.style.display = 'none';
+
+            lessonDetailModal.classList.remove('hidden');
+            console.log("User: Opening lesson modal for lesson ID:", lessonId);
+
+            try {
+                const lessonDocRef = doc(db, `artifacts/${appId}/public/data/lessons`, lessonId);
+                const lessonSnap = await getDoc(lessonDocRef);
+
+                if (lessonSnap.exists()) {
+                    const lessonData = lessonSnap.data();
+                    modalLessonTitle.textContent = lessonData.title;
+                    modalLessonDescription.textContent = lessonData.description;
+
+                    if (lessonData.videoUrl) {
+                        // Extract YouTube video ID from various URL formats
+                        const videoIdMatch = lessonData.videoUrl.match(/(?:https?:\/\/)?(?:www\.)?(?:m\.)?(?:youtube\.com|youtu\.be)\/(?:watch\?v=|embed\/|v\/|)([\w-]{11})(?:\S+)?/);
+                        if (videoIdMatch && videoIdMatch[1]) {
+                            const videoId = videoIdMatch[1];
+                            const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+                            const youtubeEmbedUrl = `https://www.youtube.com/watch?v=${videoId}`; // Link directly to YouTube
+
+                            modalVideoThumbnail.src = thumbnailUrl;
+                            modalVideoLink.href = youtubeEmbedUrl;
+                            modalVideoThumbnail.style.display = 'block';
+                            modalVideoLink.style.display = 'flex'; // Show the link/play button overlay
+                            modalVideoContainer.classList.remove('hidden');
+                        } else {
+                            videoNotAvailable.style.display = 'block';
+                            modalVideoContainer.classList.remove('hidden');
+                            console.warn("User: Invalid YouTube URL format:", lessonData.videoUrl);
+                        }
+                    } else {
+                        modalVideoContainer.classList.add('hidden');
+                    }
+
+                    if (lessonData.codeSnippet) {
+                        modalCodeSnippet.textContent = lessonData.codeSnippet;
+                        modalCodeSnippetContainer.classList.remove('hidden');
+                    } else {
+                        modalCodeSnippetContainer.classList.add('hidden');
+                    }
+
+                    // Check if lesson is already completed by the current user and quiz passed
+                    let completedLessons = {};
+                    if (currentUserId) {
+                        const userDocRef = doc(db, `artifacts/${appId}/users/${currentUserId}`);
+                        const userDocSnap = await getDoc(userDocRef);
+                        completedLessons = userDocSnap.exists() && userDocSnap.data().completedLessons ? userDocSnap.data().completedLessons : {};
+                    }
+                    
+                    const isCompleted = completedLessons[lessonId] && completedLessons[lessonId].completed === true;
+                    const quizPassed = completedLessons[lessonId] && completedLessons[lessonId].quizPassed === true;
+
+                    if (quizPassed) {
+                        viewCertificateButton.classList.remove('hidden');
+                        startQuizButton.classList.add('hidden'); // Hide quiz button if quiz passed
+                        markCompleteButton.classList.add('hidden'); // Hide mark complete if quiz passed
+                    } else if (isCompleted) {
+                        // Lesson marked complete, but quiz not passed or not taken
+                        startQuizButton.classList.remove('hidden');
+                        viewCertificateButton.classList.add('hidden');
+                        markCompleteButton.classList.add('hidden'); // Hide mark complete if already completed
+                    } else {
+                        // Lesson not completed yet
+                        markCompleteButton.classList.remove('hidden');
+                        startQuizButton.classList.remove('hidden'); // Can still take quiz even if not marked complete
+                        viewCertificateButton.classList.add('hidden');
+                    }
+
+                    console.log("User: Lesson data loaded into modal.");
+                } else {
+                    modalLessonTitle.textContent = 'Lesson Not Found';
+                    modalLessonDescription.textContent = 'This lesson could not be loaded.';
+                    console.warn("User: Lesson document not found for ID:", lessonId);
+                }
+            } catch (error) {
+                console.error("User: Error opening lesson modal:", error);
+                modalLessonTitle.textContent = 'Error Loading Lesson';
+                modalLessonDescription.textContent = 'An error occurred while loading this lesson.';
+                showMessage(authMessageBox, `Error opening lesson: ${error.message}`, 'error');
+            }
+        }
+
+        // Close Lesson Detail Modal
+        closeModalButton.addEventListener('click', () => {
+            lessonDetailModal.classList.add('hidden');
+            // Clear video elements when modal is closed
+            modalVideoThumbnail.src = '';
+            modalVideoLink.href = '#';
+            modalVideoThumbnail.style.display = 'none';
+            modalVideoLink.style.display = 'none';
+            videoNotAvailable.style.display = 'none';
+            console.log("User: Lesson modal closed.");
+        });
+
+        // Mark Lesson as Complete
+        markCompleteButton.addEventListener('click', async () => {
+            if (!currentUserId || !currentLessonId) {
+                console.error("User: User or lesson ID missing for marking complete.");
+                showMessage(authMessageBox, 'Cannot mark complete: User not logged in or lesson not selected.', 'error');
+                return;
+            }
+
+            try {
+                const userDocRef = doc(db, `artifacts/${appId}/users/${currentUserId}`);
+                await setDoc(userDocRef, {
+                    completedLessons: {
+                        [currentLessonId]: {
+                            completed: true,
+                            completedAt: serverTimestamp(),
+                            quizPassed: false // Default to false, will be updated by quiz
+                        }
+                    }
+                }, { merge: true }); 
+
+                showMessage(authMessageBox, 'Lesson marked as complete! Take the quiz to earn your certificate.', 'success'); 
+                markCompleteButton.textContent = 'Marked Complete!';
+                markCompleteButton.disabled = true;
+                markCompleteButton.classList.remove('bg-green-600', 'hover:bg-green-700');
+                markCompleteButton.classList.add('bg-gray-400', 'cursor-not-allowed');
+                startQuizButton.classList.remove('hidden'); // Show quiz button after marking complete
+                loadLessons(); // Re-load lessons to update card status
+                console.log("User: Lesson marked complete in Firestore.");
+            } catch (error) {
+                console.error("User: Error marking lesson complete:", error);
+                showMessage(authMessageBox, `Failed to mark complete: ${error.message}`, 'error');
+            }
+        });
+
+        // --- Quiz Functionality ---
+
+        // Event listener for Start Quiz button
+        startQuizButton.addEventListener('click', () => {
+            lessonDetailModal.classList.add('hidden'); // Hide lesson modal
+            quizModal.classList.remove('hidden'); // Show quiz modal
+            quizLessonTitleSpan.textContent = currentLessonTitle;
+            quizQuestionsContainer.innerHTML = ''; // Clear previous questions
+            quizMessageBox.classList.add('hidden'); // Hide message box
+            quizLoadingMessage.classList.remove('hidden'); // Show loading message
+            submitQuizButton.disabled = true; // Disable submit button while loading
+
+            generateQuizQuestions(currentLessonTitle, currentLessonDescription);
+        });
+
+        // Close Quiz Modal
+        closeQuizModalButton.addEventListener('click', () => {
+            quizModal.classList.add('hidden');
+            quizQuestionsContainer.innerHTML = ''; // Clear questions
+            quizMessageBox.classList.add('hidden');
+            currentQuizQuestions = []; // Clear quiz data
+            console.log("User: Quiz modal closed.");
+        });
+
+        // Generate Quiz Questions using Gemini API
+        async function generateQuizQuestions(topic, content) {
+            console.log("User: Generating quiz for topic:", topic);
+            const prompt = `Generate 5 multiple-choice quiz questions about "${topic}". The questions should be based on the following content: "${content}". Each question should have 4 options (A, B, C, D) and specify the correct answer. Provide the output as a JSON array of objects, where each object has 'question', 'options' (an array of strings), and 'answer' (the correct option letter, e.g., 'A').`;
+
+            let chatHistory = [];
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+
+            const payload = {
+                contents: chatHistory,
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    responseSchema: {
+                        type: "ARRAY",
+                        items: {
+                            type: "OBJECT",
+                            properties: {
+                                "question": { "type": "STRING" },
+                                "options": {
+                                    "type": "ARRAY",
+                                    "items": { "type": "STRING" }
+                                },
+                                "answer": { "type": "STRING" }
+                            },
+                            "propertyOrdering": ["question", "options", "answer"]
+                        }
+                    }
+                }
+            };
+
+            // IMPORTANT: Replace "YOUR_GEMINI_API_KEY_HERE" with your actual Gemini API Key.
+            // This is required when running the site outside of the Canvas environment.
+            // You can get one from Google AI Studio: https://aistudio.google.com/
+            const apiKey = "AIzaSyB9sOERiW2n-BQprw-kPoMmA8wSqzIXPWw"; 
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`API error: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`);
+                }
+
+                const result = await response.json();
+                console.log("User: Gemini API response:", result);
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    
+                    const jsonString = result.candidates[0].content.parts[0].text;
+                    currentQuizQuestions = JSON.parse(jsonString);
+                    renderQuizQuestions(currentQuizQuestions);
+                    quizLoadingMessage.classList.add('hidden');
+                    submitQuizButton.disabled = false; // Enable submit button
+                } else {
+                    throw new Error("Invalid response structure from Gemini API.");
+                }
+            } catch (error) {
+                console.error("User: Error generating quiz:", error);
+                quizLoadingMessage.classList.add('hidden');
+                showMessage(quizMessageBox, `Failed to generate quiz: ${error.message}. Please try again later. Ensure your Gemini API key is correct and has access.`, 'error');
+                submitQuizButton.disabled = true; // Keep disabled on error
+            }
+        }
+
+        // Render Quiz Questions to the UI
+        function renderQuizQuestions(questions) {
+            quizQuestionsContainer.innerHTML = '';
+            if (questions.length === 0) {
+                quizQuestionsContainer.innerHTML = '<p class="text-center text-gray-500">No questions generated. Please try again.</p>';
+                return;
+            }
+
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'bg-gray-50 p-6 rounded-lg shadow-md';
+                questionDiv.innerHTML = `
+                    <p class="text-xl font-semibold mb-4">Q${index + 1}: ${q.question}</p>
+                    <div class="space-y-3">
+                        ${q.options.map((option, optIndex) => `
+                            <label class="flex items-center text-lg cursor-pointer">
+                                <input type="radio" name="question-${index}" value="${String.fromCharCode(65 + optIndex)}" class="form-radio h-5 w-5 text-indigo-600">
+                                <span class="ml-3 text-gray-800">${String.fromCharCode(65 + optIndex)}. ${option}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                `;
+                quizQuestionsContainer.appendChild(questionDiv);
+            });
+        }
+
+        // Submit Quiz
+        submitQuizButton.addEventListener('click', async () => {
+            if (!currentQuizQuestions || currentQuizQuestions.length === 0) {
+                showMessage(quizMessageBox, 'No quiz questions to submit.', 'error');
+                return;
+            }
+
+            let correctAnswers = 0;
+            currentQuizQuestions.forEach((q, index) => {
+                const selectedOption = document.querySelector(`input[name="question-${index}"]:checked`);
+                if (selectedOption && selectedOption.value === q.answer) {
+                    correctAnswers++;
+                }
+            });
+
+            const score = (correctAnswers / currentQuizQuestions.length) * 100;
+            quizMessageBox.classList.remove('hidden');
+
+            if (score >= 70) {
+                showMessage(quizMessageBox, `Congratulations! You scored ${score.toFixed(0)}%. Quiz passed!`, 'success');
+                // Update Firestore to mark quiz as passed
+                try {
+                    const userDocRef = doc(db, `artifacts/${appId}/users/${currentUserId}`);
+                    await setDoc(userDocRef, {
+                        completedLessons: {
+                            [currentLessonId]: {
+                                completed: true,
+                                completedAt: serverTimestamp(),
+                                quizPassed: true,
+                                quizScore: score.toFixed(0)
+                            }
+                        }
+                    }, { merge: true });
+                    console.log("User: Quiz passed status updated in Firestore.");
+                    submitQuizButton.classList.add('hidden'); // Hide submit button
+                    setTimeout(() => {
+                        quizModal.classList.add('hidden'); // Hide quiz modal
+                        showCertificate(currentLessonId, currentLessonTitle, currentUserName); // Show certificate
+                    }, 1500); // Small delay before showing certificate
+                    
+                } catch (error) {
+                    console.error("User: Error updating quiz pass status:", error);
+                    showMessage(quizMessageBox, `Error saving quiz result: ${error.message}`, 'error');
+                }
+            } else {
+                showMessage(quizMessageBox, `You scored ${score.toFixed(0)}%. You need 70% to pass. Please try again.`, 'error');
+            }
+        });
+
+        // --- Certificate Functionality ---
+
+        // Event listener for View Certificate button
+        viewCertificateButton.addEventListener('click', () => {
+            lessonDetailModal.classList.add('hidden'); // Hide lesson modal
+            showCertificate(currentLessonId, currentLessonTitle, currentUserName);
+        });
+
+        // Show Certificate Modal
+        function showCertificate(lessonId, lessonTitle, userName) {
+            certificateName.textContent = userName || "Learner Name";
+            certificateCourseTitle.textContent = lessonTitle || "Course Title";
+            certificateDate.textContent = `Date: ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`;
+            certificateModal.classList.remove('hidden');
+            console.log("User: Certificate modal displayed.");
+        }
+
+        // Close Certificate Modal
+        closeCertificateModalButton.addEventListener('click', () => {
+            certificateModal.classList.add('hidden');
+            console.log("User: Certificate modal closed.");
+        });
+
+        // Close Certificate and Return to Dashboard
+        closeCertificateAndReturnButton.addEventListener('click', () => {
+            certificateModal.classList.add('hidden');
+            loadLessons(); // Refresh lessons list to show updated status
+            console.log("User: Certificate modal closed, returning to dashboard.");
+        });
+
+        // Download Certificate
+        downloadCertificateButton.addEventListener('click', () => {
+            // Temporarily hide buttons and other non-certificate elements for capture
+            const buttonsToHide = [downloadCertificateButton, closeCertificateModalButton, closeCertificateAndReturnButton];
+            buttonsToHide.forEach(btn => btn.classList.add('hidden'));
+
+            // Capture the certificate container
+            html2canvas(certificateContainer, {
+                scale: 2, // Increase scale for higher resolution
+                useCORS: true, // Needed if you use external images (like a real logo)
+                logging: false // Disable html2canvas logs
+            }).then(canvas => {
+                // Re-show buttons
+                buttonsToHide.forEach(btn => btn.classList.remove('hidden'));
+
+                const imgData = canvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.download = `${currentUserName}_${currentLessonTitle}_Certificate.png`;
+                link.href = imgData;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                console.log("User: Certificate downloaded.");
+            }).catch(error => {
+                console.error("User: Error generating certificate image:", error);
+                showMessage(authMessageBox, `Failed to download certificate: ${error.message}`, 'error');
+                // Re-show buttons in case of error
+                buttonsToHide.forEach(btn => btn.classList.remove('hidden'));
+            });
+        });
+
+        // Initial Firebase Authentication check for user website
+        console.log("User Site: Script loaded. Waiting for onAuthStateChanged...");
+    </script>
+</body>
+</html>
